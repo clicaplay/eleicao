@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Urna Eletrônica - Eleições do Brichos</title>
+  <title>Sistema Eleitoral Estudantil - Urna & Títulos</title>
   <style>
     :root {
       --bg: #1e293b;
@@ -34,7 +34,7 @@
       color: #1e293b;
     }
 
-    /* Navegação */
+    /* Navegação Principal */
     .header-nav {
       display: flex;
       gap: 12px;
@@ -79,7 +79,7 @@
     .panel.active { display: block; }
 
     /* ========================================================== */
-    /* ABA 1: URNA ELETRÔNICA                                     */
+    /* ABA 1: URNA ELETRÔNICA & AUTENTICAÇÃO                     */
     /* ========================================================== */
     .auth-card {
       text-align: center;
@@ -284,11 +284,11 @@
     .btn-confirma { background: var(--btn-confirma); color: white; height: 52px; font-size: 13px; }
 
     /* ========================================================== */
-    /* ABA 2: EMISSOR DE TÍTULOS (ELEIÇÕES DO BRICHOS)           */
+    /* ABA 2: EMISSOR DE TÍTULOS DE ELEITOR                      */
     /* ========================================================== */
     .form-titulos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: 1.2fr 2fr 1fr 1.5fr;
       gap: 12px;
       margin-bottom: 15px;
     }
@@ -306,7 +306,7 @@
       padding: 8px 10px;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
     }
 
     .acoes-titulos {
@@ -336,7 +336,7 @@
 
     .titulos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 16px;
     }
 
@@ -373,45 +373,29 @@
       background: var(--verde-bg);
       border: 2px solid var(--verde-titulo);
       border-radius: 6px;
-      padding: 12px;
+      padding: 10px;
       background-image: radial-gradient(#d4ecd5 15%, transparent 16%);
       background-size: 8px 8px;
     }
 
     .titulo-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      text-align: center;
       border-bottom: 1.5px solid var(--verde-titulo);
-      padding-bottom: 6px;
+      padding-bottom: 4px;
       margin-bottom: 8px;
     }
 
-    .brasao-sorocaba {
-      width: 44px;
-      height: 44px;
-      flex-shrink: 0;
-    }
-
-    .titulo-header-text {
-      flex: 1;
-      text-align: center;
-    }
-
-    .titulo-header-text h3 {
+    .titulo-header h3 {
       margin: 0;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--verde-titulo);
       letter-spacing: 0.5px;
-      line-height: 1.1;
     }
 
-    .titulo-header-text span {
+    .titulo-header span {
       font-size: 0.65rem;
-      color: #111;
-      font-weight: 800;
-      display: block;
-      margin-top: 2px;
+      color: #444;
+      font-weight: bold;
     }
 
     .titulo-body {
@@ -420,8 +404,8 @@
     }
 
     .foto-titulo-box {
-      width: 75px;
-      height: 100px;
+      width: 70px;
+      height: 90px;
       border: 1.5px dashed var(--verde-titulo);
       background-color: #fff;
       display: flex;
@@ -442,7 +426,7 @@
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
     }
 
     .campo-dado {
@@ -459,44 +443,24 @@
     }
 
     .campo-dado .valor {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: #111;
       word-break: break-word;
-    }
-
-    .linha-dupla {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-
-    .assinatura-area {
-      margin-top: 6px;
-      border-top: 1px solid #1a5f27;
-      padding-top: 2px;
-      text-align: center;
-    }
-
-    .assinatura-area .rotulo-ass {
-      font-size: 0.55rem;
-      color: #1a5f27;
-      font-weight: bold;
-      text-transform: uppercase;
     }
 
     .titulo-footer {
       margin-top: 8px;
       border-top: 1px dashed var(--verde-titulo);
       padding-top: 4px;
-      text-align: center;
-      font-size: 0.65rem;
-      font-weight: bold;
-      color: #1a5f27;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.6rem;
+      color: #333;
     }
 
     /* ========================================================== */
-    /* ABA 3: PAINEL DA COMISSÃO                                 */
+    /* ABA 3: PAINEL ADMINISTRATIVO & APURAÇÃO                   */
     /* ========================================================== */
     .admin-sec {
       background: #f8fafc;
@@ -556,7 +520,7 @@
     }
 
     /* ========================================================== */
-    /* CONFIGURAÇÕES DE IMPRESSÃO (Folha A4)                     */
+    /* REGRAS DE IMPRESSÃO (Folha A4 para Títulos)               */
     /* ========================================================== */
     @media print {
       body {
@@ -577,7 +541,7 @@
       .titulos-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 12px;
+        gap: 15px;
       }
 
       .card-wrapper {
@@ -600,13 +564,13 @@
 
     @media (max-width: 768px) {
       .urna-container { grid-template-columns: 1fr; }
-      .chapa-form-grid { grid-template-columns: 1fr; }
+      .form-titulos-grid, .chapa-form-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Menu Superior -->
+  <!-- Menu de Navegação Superior -->
   <div class="header-nav">
     <button class="tab-btn active" onclick="trocarAba('urna')">🗳️ Votação / Urna</button>
     <button class="tab-btn" onclick="trocarAba('titulos')">🪪 Emissor de Títulos</button>
@@ -617,6 +581,7 @@
   <!-- PAINEL 1: URNA ELETRÔNICA                                  -->
   <!-- ========================================================== -->
   <div id="tab-urna" class="panel active">
+    <!-- Tela de Validação do Título / Token -->
     <div id="auth-area" class="auth-card">
       <h2>Identificação do Eleitor</h2>
       <p>Digite o número do seu <strong>Título de Eleitor</strong> para votar:</p>
@@ -625,6 +590,7 @@
       <button class="btn-liberar" onclick="validarToken()">Liberar Urna</button>
     </div>
 
+    <!-- Tela da Urna Eletrônica -->
     <div id="urna-area" style="display: none;">
       <div id="eleitor-banner" class="eleitor-ativo-banner"></div>
 
@@ -634,7 +600,7 @@
           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
             <div style="flex: 1;">
               <div style="font-size: 13px; text-transform: uppercase; color: #64748b; font-weight: 600;">SEU VOTO PARA</div>
-              <h2 style="margin: 4px 0 10px 0; color: #0f172a; font-size: 20px;">ELEIÇÕES DO BRICHOS</h2>
+              <h2 style="margin: 4px 0 10px 0; color: #0f172a; font-size: 20px;">GRÊMIO ESTUDANTIL</h2>
               
               <div class="digitos">
                 <div class="digito-box" id="d1"></div>
@@ -644,9 +610,9 @@
               <div id="candidato-info" style="margin-top: 12px; font-size: 15px; line-height: 1.5;"></div>
             </div>
 
-            <!-- Foto da Chapa / Candidato -->
+            <!-- Foto da Chapa -->
             <div id="quadro-foto" class="foto-box">
-              <img id="foto-candidato" src="" alt="Foto Candidato">
+              <img id="foto-candidato" src="" alt="Foto Chapa">
             </div>
           </div>
 
@@ -684,14 +650,14 @@
   </div>
 
   <!-- ========================================================== -->
-  <!-- PAINEL 2: EMISSOR DE TÍTULOS                              -->
+  <!-- PAINEL 2: EMISSOR DE TÍTULOS DE ELEITOR                   -->
   <!-- ========================================================== -->
   <div id="tab-titulos" class="panel">
-    <h2 style="margin-bottom: 16px; color: var(--verde-titulo);">🪪 Emissão de Títulos de Eleitor - Eleições do Brichos</h2>
+    <h2 style="margin-bottom: 16px; color: var(--verde-titulo);">🪪 Emissão de Títulos de Eleitor</h2>
 
     <div class="form-titulos-grid">
       <div class="form-group">
-        <label for="inputNumero">Nº do Título / Registro:</label>
+        <label for="inputNumero">Nº do Título / Matrícula:</label>
         <input type="text" id="inputNumero" placeholder="Ex: 2026.01">
       </div>
       <div class="form-group">
@@ -700,15 +666,7 @@
       </div>
       <div class="form-group">
         <label for="inputTurma">Turma / Série:</label>
-        <input type="text" id="inputTurma" placeholder="Ex: 4º Ano B">
-      </div>
-      <div class="form-group">
-        <label for="inputNasc">Data de Nascimento:</label>
-        <input type="date" id="inputNasc">
-      </div>
-      <div class="form-group">
-        <label for="inputEmissao">Data de Emissão:</label>
-        <input type="date" id="inputEmissao">
+        <input type="text" id="inputTurma" placeholder="Ex: 8º A">
       </div>
       <div class="form-group">
         <label for="inputFoto">Foto do Aluno:</label>
@@ -724,24 +682,26 @@
       <button class="btn-action btn-red" onclick="limparTitulos()">Excluir Todos</button>
     </div>
 
+    <!-- Lista de Títulos Cadastrados -->
     <div class="titulos-grid" id="containerTitulos"></div>
   </div>
 
   <!-- ========================================================== -->
-  <!-- PAINEL 3: PAINEL DA COMISSÃO                              -->
+  <!-- PAINEL 3: PAINEL DA COMISSÃO E APURAÇÃO                   -->
   <!-- ========================================================== -->
   <div id="tab-admin" class="panel">
     <h2 style="margin-bottom: 20px; color: #0f172a;">⚙️ Painel Administrativo da Eleição</h2>
 
+    <!-- Cadastro de Chapas -->
     <div class="admin-sec">
       <h3>🏛️ 1. Cadastro de Chapas / Participantes</h3>
       <div class="chapa-form-grid">
         <input type="number" id="cad-num" class="input-padrao" placeholder="Nº (2 dígitos)" min="10" max="99">
-        <input type="text" id="cad-nome" class="input-padrao" placeholder="Nome do Personagem / Chapa">
-        <input type="text" id="cad-rep" class="input-padrao" placeholder="Representante">
+        <input type="text" id="cad-nome" class="input-padrao" placeholder="Nome da Chapa">
+        <input type="text" id="cad-rep" class="input-padrao" placeholder="Presidente / Representante">
       </div>
       <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-        <label style="font-size: 13px; font-weight: 600;">Foto (Opcional):</label>
+        <label style="font-size: 13px; font-weight: 600;">Foto da Chapa (Opcional):</label>
         <input type="file" id="cad-foto" accept="image/*" class="input-padrao" style="flex: 1; min-width: 200px;">
         <button onclick="cadastrarChapa()" class="btn-action btn-green">Cadastrar Chapa</button>
       </div>
@@ -749,10 +709,11 @@
       <div class="chapas-list" id="lista-chapas-admin"></div>
     </div>
 
+    <!-- Eleitores e Códigos Autorizados -->
     <div class="admin-sec">
-      <h3>🎟️ 2. Eleitores Habilitados para Votar</h3>
+      <h3>🎟️ 2. Lista de Eleitores Aptos a Votar</h3>
       <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">
-        Os títulos gerados na aba <strong>Emissor de Títulos</strong> são sincronizados automaticamente aqui como permissões de voto único.
+        Os números dos títulos cadastrados na aba <strong>Emissor de Títulos</strong> são sincronizados automaticamente aqui como credenciais de voto único.
       </p>
       <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
         <button onclick="gerarTokensAvulsos()" class="btn-action btn-blue">+ Gerar Tokens Avulsos</button>
@@ -762,6 +723,7 @@
       <textarea id="lista-tokens" class="input-padrao" style="width: 100%; height: 80px; font-family: monospace; font-size: 12px;" readonly></textarea>
     </div>
 
+    <!-- Apuração -->
     <div class="admin-sec">
       <h3>📊 3. Boletim de Urna / Apuração em Tempo Real</h3>
       <div id="relatorio-apuracao" style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #cbd5e1; line-height: 1.8;"></div>
@@ -774,33 +736,12 @@
   </div>
 
   <script>
-    // Brasão de Sorocaba em SVG Vetorial Embutido
-    const BRASAO_SOROCABA_SVG = `
-      <svg class="brasao-sorocaba" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-        <path d="M 35,22 L 40,10 L 46,10 L 48,16 L 52,16 L 54,10 L 60,10 L 65,22 Z" fill="#eab308" stroke="#000" stroke-width="2"/>
-        <path d="M 38,15 H 62 V 22 H 38 Z" fill="#ca8a04" stroke="#000" stroke-width="1.5"/>
-        <path d="M 18,25 C 10,40 8,65 18,75 C 24,65 24,50 28,45 C 26,35 22,28 18,25 Z" fill="#ffffff" stroke="#000" stroke-width="2"/>
-        <path d="M 82,25 C 90,40 92,65 82,75 C 76,65 76,50 72,45 C 74,35 78,28 82,25 Z" fill="#ffffff" stroke="#000" stroke-width="2"/>
-        <path d="M 15,22 L 8,10" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M 85,22 L 92,10" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
-        <g stroke="#000" stroke-width="2">
-          <path d="M 35,22 H 65 V 50 H 35 Z" fill="#dc2626"/>
-          <path d="M 35,50 H 65 C 65,65 50,75 50,75 C 50,75 35,65 35,50 Z" fill="#eab308"/>
-          <path d="M 50,50 L 65,70 H 35 Z" fill="#1e293b"/>
-        </g>
-        <path d="M 42,32 L 58,42 M 58,32 L 42,42" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-        <path d="M 10,78 Q 50,90 90,78 Q 50,84 10,78 Z" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
-        <text x="50" y="82" font-size="4" font-weight="bold" text-anchor="middle" fill="#000" letter-spacing="0.5">PRO UNA LIBERA PATRIA PUGNAVI</text>
-        <text x="50" y="98" font-size="8.5" font-family="Arial Black, sans-serif" font-weight="900" text-anchor="middle" fill="#000">SOROCABA</text>
-        <rect x="15" y="103" width="35" height="3" fill="#dc2626"/>
-        <rect x="50" y="103" width="35" height="3" fill="#eab308"/>
-      </svg>
-    `;
-
-    // Estado e Armazenamento
+    // ==========================================================
+    // ESTADO E PERSISTÊNCIA (localStorage)
+    // ==========================================================
     let chapas = JSON.parse(localStorage.getItem('gremio_chapas')) || [
-      { numero: '10', nome: 'Bandeira & Amigos', rep: 'Bandeira', foto: null },
-      { numero: '20', nome: 'Jairzinho & Turma', rep: 'Jairzinho', foto: null }
+      { numero: '10', nome: 'Chapa 10 - Renovação & Voz', rep: 'Ana Beatriz', foto: null },
+      { numero: '20', nome: 'Chapa 20 - União Estudantil', rep: 'Lucas Silva', foto: null }
     ];
 
     let titulos = JSON.parse(localStorage.getItem('gremio_titulos')) || [];
@@ -812,7 +753,7 @@
     let votoDigitado = '';
     let isBranco = false;
 
-    // Sintetizador de Áudio
+    // Web Audio API para simular sons da urna
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function bip(freq = 440, dur = 0.08) {
@@ -845,12 +786,6 @@
       } catch (e) {}
     }
 
-    function formatarData(dataStr) {
-      if (!dataStr) return '--/--/----';
-      const p = dataStr.split('-');
-      return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : dataStr;
-    }
-
     function salvarDados() {
       localStorage.setItem('gremio_chapas', JSON.stringify(chapas));
       localStorage.setItem('gremio_titulos', JSON.stringify(titulos));
@@ -878,7 +813,7 @@
     }
 
     // ==========================================================
-    // URNA
+    // LÓGICA DA URNA ELETRÔNICA
     // ==========================================================
     function validarToken() {
       const input = document.getElementById('token-input').value.trim().toUpperCase();
@@ -893,10 +828,10 @@
       }
 
       tokenAtual = input;
-      const eleitor = titulos.find(t => t.numero.toUpperCase() === input);
+      const eleitorCorrespondente = titulos.find(t => t.numero.toUpperCase() === input);
       
       const banner = document.getElementById('eleitor-banner');
-      banner.innerHTML = `<span>Eleitor: <strong>${eleitor ? eleitor.nome : input}</strong></span><span>Título: ${input}</span>`;
+      banner.innerHTML = `<span>Eleitor Identificado: <strong>${eleitorCorrespondente ? eleitorCorrespondente.nome : input}</strong></span><span>Título: ${input}</span>`;
 
       document.getElementById('auth-area').style.display = 'none';
       document.getElementById('urna-area').style.display = 'block';
@@ -942,8 +877,8 @@
         const c = chapas.find(x => x.numero === votoDigitado);
         if (c) {
           document.getElementById('candidato-info').innerHTML = `
-            <strong>Opção:</strong> ${c.nome}<br>
-            <strong>Representante:</strong> ${c.rep}
+            <strong>Chapa:</strong> ${c.nome}<br>
+            <strong>Presidente:</strong> ${c.rep}
           `;
           if (c.foto) {
             imgFoto.src = c.foto;
@@ -952,7 +887,7 @@
             quadroFoto.style.display = 'none';
           }
         } else {
-          document.getElementById('candidato-info').innerHTML = '<h3 style="color:#ef4444; margin-top:5px;">VOTO NULO</h3><small style="color:#64748b;">Opção inexistente</small>';
+          document.getElementById('candidato-info').innerHTML = '<h3 style="color:#ef4444; margin-top:5px;">VOTO NULO</h3><small style="color:#64748b;">Chapa inexistente</small>';
           quadroFoto.style.display = 'none';
         }
       } else {
@@ -972,7 +907,7 @@
       }
 
       votos.push(tipoVoto);
-      tokens = tokens.filter(t => t !== tokenAtual);
+      tokens = tokens.filter(t => t !== tokenAtual); // queima a permissão de voto
       salvarDados();
       somFim();
 
@@ -992,7 +927,7 @@
     }
 
     // ==========================================================
-    // EMISSOR DE TÍTULOS
+    // LÓGICA DO EMISSOR DE TÍTULOS
     // ==========================================================
     document.getElementById('inputFoto').addEventListener('change', function(e) {
       const file = e.target.files[0];
@@ -1009,29 +944,26 @@
       const numero = document.getElementById('inputNumero').value.trim();
       const nome = document.getElementById('inputNome').value.trim();
       const turma = document.getElementById('inputTurma').value.trim();
-      const nasc = document.getElementById('inputNasc').value;
-      const emissao = document.getElementById('inputEmissao').value;
 
       if (!nome) {
-        alert('Informe ao menos o nome do aluno.');
+        alert('Informe o nome do aluno.');
         return;
       }
 
-      const numFinal = numero || `2026.${Math.floor(100 + Math.random() * 900)}`;
+      const numFinal = numero || `E-${Math.floor(1000 + Math.random() * 9000)}`;
 
       const novoTitulo = {
         id: Date.now(),
         numero: numFinal,
         nome: nome,
         turma: turma || '----',
-        nascimento: formatarData(nasc),
-        emissao: formatarData(emissao || new Date().toISOString().split('T')[0]),
         foto: fotoTemporariaTitulo,
         selecionado: true
       };
 
       titulos.push(novoTitulo);
 
+      // Adiciona o número do título como credencial válida de votação
       if (!tokens.includes(numFinal.toUpperCase())) {
         tokens.push(numFinal.toUpperCase());
       }
@@ -1039,12 +971,10 @@
       salvarDados();
       renderizarCardsTitulos();
 
-      // Reset
+      // Limpar formulário
       document.getElementById('inputNumero').value = '';
       document.getElementById('inputNome').value = '';
       document.getElementById('inputTurma').value = '';
-      document.getElementById('inputNasc').value = '';
-      document.getElementById('inputEmissao').value = '';
       document.getElementById('inputFoto').value = '';
       fotoTemporariaTitulo = '';
       document.getElementById('inputNome').focus();
@@ -1099,11 +1029,8 @@
 
           <div class="titulo-card">
             <div class="titulo-header">
-              ${BRASAO_SOROCABA_SVG}
-              <div class="titulo-header-text">
-                <h3>JUSTIÇA ELEITORAL ESCOLAR</h3>
-                <span>ELEIÇÕES DO BRICHOS</span>
-              </div>
+              <h3>JUSTIÇA ELEITORAL ESCOLAR</h3>
+              <span>ELEIÇÕES DO GRÊMIO ESTUDANTIL</span>
             </div>
 
             <div class="titulo-body">
@@ -1113,38 +1040,23 @@
 
               <div class="dados-titulo">
                 <div class="campo-dado">
-                  <span class="rotulo">Número de Inscrição</span>
+                  <span class="rotulo">Número do Título</span>
                   <span class="valor">${t.numero}</span>
                 </div>
                 <div class="campo-dado">
                   <span class="rotulo">Nome do Eleitor(a)</span>
                   <span class="valor">${t.nome}</span>
                 </div>
-                
-                <div class="linha-dupla">
-                  <div class="campo-dado">
-                    <span class="rotulo">Data de Nasc.</span>
-                    <span class="valor">${t.nascimento}</span>
-                  </div>
-                  <div class="campo-dado">
-                    <span class="rotulo">Turma / Série</span>
-                    <span class="valor">${t.turma}</span>
-                  </div>
-                </div>
-
                 <div class="campo-dado">
-                  <span class="rotulo">Data de Emissão</span>
-                  <span class="valor">${t.emissao}</span>
+                  <span class="rotulo">Turma / Série</span>
+                  <span class="valor">${t.turma}</span>
                 </div>
               </div>
             </div>
 
-            <div class="assinatura-area">
-              <div class="rotulo-ass">Assinatura do Eleitor(a)</div>
-            </div>
-
             <div class="titulo-footer">
-              Escola Municipal João Francisco Rosa
+              <span>DOCUMENTO OFICIAL</span>
+              <span>VOTO SECRETO</span>
             </div>
           </div>
         `;
@@ -1162,7 +1074,7 @@
     }
 
     // ==========================================================
-    // PAINEL ADMINISTRATIVO
+    // LÓGICA DO PAINEL DA COMISSÃO (ADMIN)
     // ==========================================================
     function cadastrarChapa() {
       const num = document.getElementById('cad-num').value.trim();
@@ -1171,12 +1083,12 @@
       const fileInput = document.getElementById('cad-foto');
 
       if (num.length !== 2 || !nome) {
-        alert('O número deve ter 2 dígitos e o nome é obrigatório.');
+        alert('O número da chapa deve ter exatamente 2 dígitos e o nome é obrigatório.');
         return;
       }
 
       if (chapas.some(c => c.numero === num)) {
-        alert('Já existe uma chapa cadastrada com esse número.');
+        alert('Já existe uma chapa com este número.');
         return;
       }
 
@@ -1203,7 +1115,7 @@
     }
 
     function excluirChapa(numero) {
-      if (confirm(`Remover opção ${numero}?`)) {
+      if (confirm(`Remover chapa ${numero}?`)) {
         chapas = chapas.filter(c => c.numero !== numero);
         salvarDados();
       }
@@ -1229,6 +1141,7 @@
       document.getElementById('lista-tokens').value = tokens.join('\n');
       document.getElementById('token-status').innerText = `${tokens.length} título(s)/código(s) válidos para votar.`;
 
+      // Renderizar Chapas
       const containerChapas = document.getElementById('lista-chapas-admin');
       containerChapas.innerHTML = '';
       chapas.forEach(c => {
@@ -1241,17 +1154,18 @@
           ${imgTag}
           <div style="flex:1;">
             <strong>${c.numero} - ${c.nome}</strong><br>
-            <small style="color:#64748b;">Rep: ${c.rep}</small>
+            <small style="color:#64748b;">Pres: ${c.rep}</small>
           </div>
           <button onclick="excluirChapa('${c.numero}')" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px;">✕</button>
         `;
         containerChapas.appendChild(item);
       });
 
+      // Boletim de Urna
       const total = votos.length;
       let html = `<div style="font-size:15px; margin-bottom:12px;"><strong>Total de Votos Depositados:</strong> ${total}</div>`;
       html += `<table style="width:100%; border-collapse: collapse; font-size: 13px;">`;
-      html += `<tr style="border-bottom: 2px solid #cbd5e1; text-align: left;"><th style="padding: 6px;">Opção / Candidato</th><th>Votos</th><th>%</th></tr>`;
+      html += `<tr style="border-bottom: 2px solid #cbd5e1; text-align: left;"><th style="padding: 6px;">Chapa / Opção</th><th>Votos</th><th>%</th></tr>`;
 
       chapas.forEach(c => {
         const count = votos.filter(v => v === c.numero).length;
@@ -1271,11 +1185,10 @@
     function imprimirBoletim() {
       const conteudo = document.getElementById('relatorio-apuracao').innerHTML;
       const janela = window.open('', '', 'width=600,height=600');
-      janela.document.write('<html><head><title>Boletim de Urna - Eleições do Brichos</title>');
+      janela.document.write('<html><head><title>Boletim de Urna - Grêmio</title>');
       janela.document.write('<style>body{font-family:sans-serif;padding:20px;line-height:1.6;} table{width:100%;border-collapse:collapse;} th,td{border:1px solid #ccc;padding:8px;}</style>');
       janela.document.write('</head><body>');
-      janela.document.write('<h2>BOLETIM OFICIAL DE APURAÇÃO - ELEIÇÕES DO BRICHOS</h2>');
-      janela.document.write('<h4>Escola Municipal João Francisco Rosa</h4><hr><br>');
+      janela.document.write('<h2>BOLETIM OFICIAL DE APURAÇÃO</h2><hr><br>');
       janela.document.write(conteudo);
       janela.document.write('<br><br><p>Emissão: ' + new Date().toLocaleString('pt-BR') + '</p>');
       janela.document.write('</body></html>');
@@ -1284,13 +1197,13 @@
     }
 
     function resetarTudo() {
-      if (confirm('ATENÇÃO: Deseja apagar todos os dados da eleição (votos, cadastros e títulos)?')) {
+      if (confirm('ATENÇÃO: Deseja apagar todos os dados da eleição (votos, chapas e títulos)?')) {
         localStorage.clear();
         location.reload();
       }
     }
 
-    // Inicialização do sistema
+    // Inicialização
     renderizarCardsTitulos();
     atualizarAdmin();
   </script>
