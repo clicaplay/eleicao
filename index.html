@@ -41,11 +41,12 @@
       gap: 12px;
       margin-bottom: 20px;
       width: 100%;
-      max-width: 900px;
+      max-width: 960px;
       justify-content: center;
+      flex-wrap: wrap;
     }
     .tab-btn {
-      padding: 12px 24px;
+      padding: 12px 20px;
       border: none;
       background: #334155;
       color: #f8fafc;
@@ -68,7 +69,7 @@
       padding: 28px;
       border-radius: 14px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-      max-width: 920px;
+      max-width: 960px;
       width: 100%;
     }
     .panel.active { display: block; }
@@ -77,16 +78,16 @@
     .auth-card {
       text-align: center;
       padding: 40px 20px;
-      max-width: 480px;
+      max-width: 520px;
       margin: 0 auto;
     }
     .auth-card h2 {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       color: #0f172a;
     }
     .auth-card p {
       color: #64748b;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       font-size: 15px;
     }
     .token-input {
@@ -95,13 +96,13 @@
       text-transform: uppercase;
       text-align: center;
       width: 100%;
-      max-width: 320px;
+      max-width: 340px;
       letter-spacing: 2px;
       font-weight: bold;
       border: 2px solid #cbd5e1;
       border-radius: 8px;
       outline: none;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .token-input:focus {
       border-color: #2563eb;
@@ -116,7 +117,7 @@
       cursor: pointer;
       font-weight: bold;
       width: 100%;
-      max-width: 320px;
+      max-width: 340px;
       transition: 0.2s;
     }
     .btn-liberar:hover {
@@ -318,7 +319,34 @@
     .btn-success { background: #16a34a; color: white; }
     .btn-outline { background: white; border: 1px solid #cbd5e1; color: #1e293b; }
     .btn-danger { background: #dc2626; color: white; }
-    
+
+    /* Tabela de Alunos */
+    .table-container {
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      margin-top: 12px;
+      background: white;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    table.data-table th, table.data-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    table.data-table th {
+      background: #f1f5f9;
+      position: sticky;
+      top: 0;
+      font-weight: bold;
+      color: #334155;
+    }
+
     @media (max-width: 768px) {
       .urna-container {
         grid-template-columns: 1fr;
@@ -333,24 +361,23 @@
 
   <div class="header-nav">
     <button class="tab-btn active" id="btn-tab-urna" onclick="trocarAba('urna')">🗳️ Votação / Urna</button>
-    <button class="tab-btn" id="btn-tab-admin" onclick="trocarAba('admin')">⚙️ Painel da Comissão & Apuração</button>
+    <button class="tab-btn" id="btn-tab-eleitores" onclick="trocarAba('eleitores')">🪪 Título Eleitoral & Alunos</button>
+    <button class="tab-btn" id="btn-tab-admin" onclick="trocarAba('admin')">⚙️ Chapas & Apuração</button>
   </div>
 
-  <!-- ABA DA URNA -->
+  <!-- 1. ABA DA URNA -->
   <div id="tab-urna" class="panel active">
-    <!-- Tela de Código do Eleitor -->
     <div id="auth-area" class="auth-card">
       <h2>Identificação do Eleitor</h2>
-      <p>Digite o seu código único de votação para liberar a urna:</p>
-      <input type="text" id="token-input" class="token-input" placeholder="EX: VOTE-101" autocomplete="off">
+      <p>Digite o seu <strong>Código do Título</strong> ou <strong>Nº da Chamada</strong>:</p>
+      <input type="text" id="token-input" class="token-input" placeholder="EX: 1 OU TIT-01" autocomplete="off">
       <br>
-      <button class="btn-liberar" onclick="validarToken()">Liberar Votação</button>
+      <button class="btn-liberar" onclick="validarToken()">Liberar Urna</button>
+      <div id="eleitor-saudacao" style="margin-top: 14px; font-weight: bold; color: #16a34a; font-size: 16px;"></div>
     </div>
 
-    <!-- Tela da Urna Eletrônica -->
     <div id="urna-area" style="display: none;">
       <div class="urna-container">
-        <!-- Tela -->
         <div class="tela" id="tela-urna">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
             <div style="flex: 1;">
@@ -365,7 +392,6 @@
               <div id="candidato-info" style="margin-top: 12px; font-size: 15px; line-height: 1.5;"></div>
             </div>
             
-            <!-- Foto da Chapa -->
             <div id="quadro-foto" class="foto-box">
               <img id="foto-candidato" src="" alt="Foto Chapa">
             </div>
@@ -377,7 +403,6 @@
           </div>
         </div>
 
-        <!-- Teclado -->
         <div class="teclado">
           <div class="justica-header">JUSTIÇA ELEITORAL ESCOLAR</div>
           <div class="grid-numerico">
@@ -404,11 +429,85 @@
     </div>
   </div>
 
-  <!-- ABA ADMINISTRATIVA -->
+  <!-- 2. ABA DE ELEITORES & EMISSÃO DE TÍTULOS (MODELO OFICIAL INFANTIL) -->
+  <div id="tab-eleitores" class="panel">
+    <h2 style="margin-bottom: 8px; color: #0f172a;">🪪 Emissão de "Meu Título Eleitoral"</h2>
+    <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">Importe a lista da chamada escolar para imprimir os títulos no modelo oficial infantil (com espaço para assinatura e digital do polegar).</p>
+
+    <!-- Dados da Escola para o Título -->
+    <div class="admin-sec" style="background: #f0fdf4; border-color: #bbf7d0;">
+      <h3 style="color: #166534;">🏫 Personalização do Título Eleitoral</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 120px 120px; gap: 12px; margin-top: 10px;">
+        <div>
+          <label style="font-size: 12px; font-weight: bold; color: #374151;">Nome da Escola / Instituição:</label>
+          <input type="text" id="cfg-escola" class="input-padrao" value="ESCOLA MUNICIPAL" style="width: 100%; margin-top: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: bold; color: #374151;">Município / UF:</label>
+          <input type="text" id="cfg-municipio" class="input-padrao" value="SOROCABA - SP" style="width: 100%; margin-top: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: bold; color: #374151;">Zona:</label>
+          <input type="text" id="cfg-zona" class="input-padrao" value="001" style="width: 100%; margin-top: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: bold; color: #374151;">Seção:</label>
+          <input type="text" id="cfg-secao" class="input-padrao" value="010" style="width: 100%; margin-top: 4px;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Importação de Lista de Alunos -->
+    <div class="admin-sec">
+      <h3>📥 Importar Lista de Chamada</h3>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">Formato aceito: <code>Nº, Nome da Criança</code> (um aluno por linha).</p>
+      
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+        <label class="btn-action btn-outline" style="cursor: pointer;">
+          📂 Carregar Arquivo (.txt / .csv)
+          <input type="file" id="chamada-file" accept=".txt,.csv" style="display: none;" onchange="importarArquivoChamada(event)">
+        </label>
+        <button onclick="gerarExemploChamada()" class="btn-action btn-outline">💡 Carregar Exemplo</button>
+        <button onclick="limparEleitores()" class="btn-action btn-outline" style="color: #dc2626; border-color: #fca5a5;">🗑️ Limpar Todos</button>
+      </div>
+
+      <textarea id="texto-chamada" class="input-padrao" style="width: 100%; height: 90px; font-family: monospace; font-size: 13px;" placeholder="Exemplo:&#10;1, Ana Clara Santos&#10;2, Bernardo Ferreira Lima&#10;3, Clara Beatriz Rocha"></textarea>
+      <div style="margin-top: 8px; display: flex; justify-content: flex-end;">
+        <button onclick="processarTextoChamada()" class="btn-action btn-primary">➕ Processar e Cadastrar Alunos</button>
+      </div>
+    </div>
+
+    <!-- Tabela e Emissão -->
+    <div class="admin-sec">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <h3>📋 Alunos Cadastrados (<span id="total-eleitores-badge">0</span>)</h3>
+        <div style="display: flex; gap: 8px;">
+          <button onclick="imprimirTitulosVerdes()" class="btn-action btn-success" style="font-size: 14px; padding: 10px 18px;">🖨️ IMPRIMIR "MEU TÍTULO ELEITORAL" (MODELO ATIVIDADES)</button>
+          <button onclick="exportarListaEleitoresTxt()" class="btn-action btn-secondary">📥 Exportar (.txt)</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 80px;">Nº Chamada</th>
+              <th>Nome da Criança</th>
+              <th>Nº Inscrição / Título</th>
+              <th style="width: 110px;">Status</th>
+              <th style="width: 60px;">Ação</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-eleitores-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ABA ADMINISTRATIVA: CHAPAS & APURAÇÃO -->
   <div id="tab-admin" class="panel">
     <h2 style="margin-bottom: 20px; color: #0f172a;">Painel Administrativo da Comissão</h2>
     
-    <!-- Seção 1: Chapas -->
     <div class="admin-sec">
       <h3>🏛️ 1. Cadastro de Chapas / Participantes</h3>
       <div class="form-grid">
@@ -425,38 +524,8 @@
       <div class="chapas-list" id="lista-chapas-admin"></div>
     </div>
 
-    <!-- Seção 2: Códigos dos Eleitores (Tokens) -->
     <div class="admin-sec">
-      <h3>🎟️ 2. Códigos de Votação (Tokens de Eleitores)</h3>
-      <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">Gere, importe uma lista externa ou exporte os códigos ativos para distribuir aos alunos.</p>
-      
-      <!-- Controles de Geração e Ações -->
-      <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap;">
-        <input type="number" id="qtd-tokens" class="input-padrao" value="15" style="width: 85px;">
-        <button onclick="gerarTokens()" class="btn-action btn-primary">➕ Gerar Códigos</button>
-        <button onclick="exportarTokens()" class="btn-action btn-success">📥 Exportar Lista (.txt)</button>
-        
-        <!-- Importação via Arquivo -->
-        <label class="btn-action btn-outline" style="cursor: pointer;">
-          📤 Importar (.txt / .csv)
-          <input type="file" id="import-file" accept=".txt,.csv" style="display: none;" onchange="importarTokensArquivo(event)">
-        </label>
-
-        <button onclick="copiarTokens()" class="btn-action btn-secondary">📋 Copiar Códigos</button>
-        <button onclick="limparTokens()" class="btn-action btn-outline" style="color: #dc2626; border-color: #fca5a5;">🗑️ Limpar Todos</button>
-        <span id="token-status" style="font-size: 14px; color: #0284c7; font-weight: bold; margin-left: 5px;"></span>
-      </div>
-
-      <textarea id="lista-tokens" class="input-padrao" style="width: 100%; height: 110px; font-family: monospace; font-size: 13px;" placeholder="Digite ou cole códigos aqui (um por linha) e clique em 'Salvar Edições'..." onchange="atualizarTokensPeloTextarea()"></textarea>
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
-        <small style="color: #64748b;">Você também pode colar sua própria lista diretamente no campo acima (1 código por linha).</small>
-        <button onclick="atualizarTokensPeloTextarea()" class="btn-action btn-primary" style="font-size: 12px; padding: 6px 12px;">💾 Salvar Lista Manual</button>
-      </div>
-    </div>
-
-    <!-- Seção 3: Apuração / Boletim de Urna -->
-    <div class="admin-sec">
-      <h3>📊 3. Boletim de Urna / Apuração em Tempo Real</h3>
+      <h3>📊 2. Boletim de Urna / Apuração em Tempo Real</h3>
       <div id="relatorio-apuracao" style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #cbd5e1; line-height: 1.8;"></div>
       <br>
       <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -467,27 +536,28 @@
   </div>
 
   <script>
-    // Armazenamento Offline
     let chapas = JSON.parse(localStorage.getItem('gremio_chapas')) || [
       { numero: '10', nome: 'Chapa 10 - Renovação & Voz', rep: 'Ana Beatriz', foto: null },
       { numero: '20', nome: 'Chapa 20 - União Estudantil', rep: 'Lucas Silva', foto: null }
     ];
-    let tokens = JSON.parse(localStorage.getItem('gremio_tokens')) || ['VOTE-101', 'VOTE-102', 'VOTE-103', 'VOTE-104', 'VOTE-105'];
+    
+    let eleitores = JSON.parse(localStorage.getItem('gremio_eleitores')) || [
+      { chamada: '1', nome: 'Alice Silva Fernandes', token: 'TIT-01-4421', votou: false },
+      { chamada: '2', nome: 'Bernardo Ferreira Lima', token: 'TIT-02-8930', votou: false },
+      { chamada: '3', nome: 'Clara Beatriz Rocha', token: 'TIT-03-3112', votou: false }
+    ];
+
     let votos = JSON.parse(localStorage.getItem('gremio_votos')) || [];
     
-    let tokenAtual = null;
+    let eleitorAtual = null;
     let votoDigitado = '';
     let isBranco = false;
 
-    // Sintetizador de Áudio (Web Audio API nativo)
+    // Web Audio API
     let audioCtx = null;
     function obterAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       return audioCtx;
     }
     
@@ -523,9 +593,9 @@
 
     function salvar() {
       localStorage.setItem('gremio_chapas', JSON.stringify(chapas));
-      localStorage.setItem('gremio_tokens', JSON.stringify(tokens));
+      localStorage.setItem('gremio_eleitores', JSON.stringify(eleitores));
       localStorage.setItem('gremio_votos', JSON.stringify(votos));
-      atualizarAdmin();
+      renderizarTudo();
     }
 
     function trocarAba(aba) {
@@ -535,27 +605,44 @@
       if (aba === 'urna') {
         document.getElementById('tab-urna').classList.add('active');
         document.getElementById('btn-tab-urna').classList.add('active');
+      } else if (aba === 'eleitores') {
+        document.getElementById('tab-eleitores').classList.add('active');
+        document.getElementById('btn-tab-eleitores').classList.add('active');
+        renderizarEleitores();
       } else {
         document.getElementById('tab-admin').classList.add('active');
         document.getElementById('btn-tab-admin').classList.add('active');
-        atualizarAdmin();
+        renderizarAdmin();
       }
     }
 
     function validarToken() {
       const input = document.getElementById('token-input').value.trim().toUpperCase();
       if (!input) {
-        alert('Por favor, informe seu código de eleitor.');
+        alert('Por favor, digite o número da chamada ou o código do título.');
         return;
       }
-      if (!tokens.includes(input)) {
-        alert('Código inválido ou já utilizado!');
+
+      const aluno = eleitores.find(e => e.chamada === input || e.token === input);
+      
+      if (!aluno) {
+        alert('Eleitor não encontrado no cadastro escolar!');
         return;
       }
-      tokenAtual = input;
-      document.getElementById('auth-area').style.display = 'none';
-      document.getElementById('urna-area').style.display = 'block';
-      corrige();
+
+      if (aluno.votou) {
+        alert(`O eleitor ${aluno.nome} (Nº ${aluno.chamada}) já votou nesta eleição!`);
+        return;
+      }
+
+      eleitorAtual = aluno;
+      document.getElementById('eleitor-saudacao').innerText = `Bem-vindo(a), ${aluno.nome}!`;
+      
+      setTimeout(() => {
+        document.getElementById('auth-area').style.display = 'none';
+        document.getElementById('urna-area').style.display = 'block';
+        corrige();
+      }, 500);
     }
 
     function digito(n) {
@@ -627,7 +714,8 @@
       }
 
       votos.push(tipoVoto);
-      tokens = tokens.filter(t => t !== tokenAtual); // queima o token
+      if (eleitorAtual) eleitorAtual.votou = true;
+
       salvar();
       somFim();
 
@@ -641,6 +729,366 @@
       setTimeout(() => {
         location.reload();
       }, 2200);
+    }
+
+    function gerarCodigoUnico(numChamada) {
+      const aleat = Math.floor(1000 + Math.random() * 9000);
+      return 'TIT-' + numChamada.padStart(2, '0') + '-' + aleat;
+    }
+
+    function processarTextoChamada() {
+      const texto = document.getElementById('texto-chamada').value.trim();
+      if (!texto) {
+        alert('Cole ou digite a lista de alunos com os números.');
+        return;
+      }
+
+      const linhas = texto.split('\n');
+      let cadastrados = 0;
+
+      linhas.forEach(linha => {
+        linha = linha.trim();
+        if (!linha) return;
+
+        let partes = linha.split(/[,;\-\t]/);
+        if (partes.length < 2) {
+          const match = linha.match(/^(\d+)[.\s]+(.+)$/);
+          if (match) partes = [match[1], match[2]];
+        }
+
+        if (partes.length >= 2) {
+          const num = partes[0].trim();
+          const nome = partes.slice(1).join(' ').trim();
+
+          if (num && nome) {
+            const existente = eleitores.find(e => e.chamada === num);
+            if (existente) {
+              existente.nome = nome;
+            } else {
+              eleitores.push({
+                chamada: num,
+                nome: nome,
+                token: gerarCodigoUnico(num),
+                votou: false
+              });
+              cadastrados++;
+            }
+          }
+        }
+      });
+
+      eleitores.sort((a, b) => parseInt(a.chamada) - parseInt(b.chamada));
+      salvar();
+      document.getElementById('texto-chamada').value = '';
+      alert(`${cadastrados} novos alunos adicionados ao cadastro eleitoral!`);
+    }
+
+    function importarArquivoChamada(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('texto-chamada').value = e.target.result;
+        processarTextoChamada();
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    function gerarExemploChamada() {
+      document.getElementById('texto-chamada').value = 
+`1, Alice Silva Fernandes
+2, Bernardo Ferreira Lima
+3, Clara Beatriz Rocha
+4, Davi Lucas Monteiro
+5, Enzo Gabriel Pires
+6, Gabriela Souza Moreira`;
+    }
+
+    function removerEleitor(chamada) {
+      if (confirm(`Remover aluno Nº ${chamada}?`)) {
+        eleitores = eleitores.filter(e => e.chamada !== chamada);
+        salvar();
+      }
+    }
+
+    function limparEleitores() {
+      if (confirm('Tem certeza que deseja apagar todos os eleitores cadastrados?')) {
+        eleitores = [];
+        salvar();
+      }
+    }
+
+    function renderizarEleitores() {
+      document.getElementById('total-eleitores-badge').innerText = eleitores.length;
+      const tbody = document.getElementById('tabela-eleitores-body');
+      tbody.innerHTML = '';
+
+      if (eleitores.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#64748b;padding:20px;">Nenhum aluno cadastrado. Importe a lista acima!</td></tr>';
+        return;
+      }
+
+      eleitores.forEach(e => {
+        const tr = document.createElement('tr');
+        const statusHtml = e.votou 
+          ? '<span style="color:#16a34a; font-weight:bold;">✔ Votou</span>' 
+          : '<span style="color:#eab308; font-weight:bold;">⏳ Pendente</span>';
+
+        tr.innerHTML = `
+          <td><strong>#${e.chamada}</strong></td>
+          <td>${e.nome}</td>
+          <td><code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-weight:bold;">${e.token}</code></td>
+          <td>${statusHtml}</td>
+          <td><button onclick="removerEleitor('${e.chamada}')" style="background:none;border:none;color:#ef4444;cursor:pointer;font-weight:bold;">✕</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function exportarListaEleitoresTxt() {
+      if (eleitores.length === 0) {
+        alert('Não há eleitores cadastrados para exportar.');
+        return;
+      }
+      let conteudo = "Nº CHAMADA | NOME DO ALUNO | CÓDIGO DO TÍTULO | STATUS\r\n";
+      conteudo += "--------------------------------------------------------\r\n";
+      eleitores.forEach(e => {
+        conteudo += `${e.chamada.padEnd(10)} | ${e.nome.padEnd(30)} | ${e.token.padEnd(15)} | ${e.votou ? 'VOTOU' : 'PENDENTE'}\r\n`;
+      });
+
+      const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `lista_eleitores_chamada_${new Date().toISOString().slice(0,10)}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    /* --- EMISSÃO NO MODELO VISUAL DO PDF (ELEICAODOSBICHOSATIVIDADES.PDF) --- */
+    function imprimirTitulosVerdes() {
+      if (eleitores.length === 0) {
+        alert('Cadastre ou importe alunos antes de imprimir os títulos eleitorais.');
+        return;
+      }
+
+      const municipio = document.getElementById('cfg-municipio').value || 'SOROCABA - SP';
+      const zona = document.getElementById('cfg-zona').value || '001';
+      const secao = document.getElementById('cfg-secao').value || '010';
+      const hoje = new Date().toLocaleDateString('pt-BR');
+
+      const janela = window.open('', '', 'width=950,height=750');
+      janela.document.write(`
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+          <meta charset="UTF-8">
+          <title>Meu Título Eleitoral - Impressão</title>
+          <style>
+            @page {
+              size: A4 portrait;
+              margin: 8mm;
+            }
+            * { box-sizing: border-box; }
+            body {
+              font-family: Arial, Helvetica, sans-serif;
+              background: #fff;
+              margin: 0;
+              padding: 0;
+            }
+            .grid-a4 {
+              display: grid;
+              grid-template-columns: 1fr;
+              gap: 16px;
+            }
+            /* O Título Completo estilo o PDF com 2 abas/lados: Frente e Verso (Assinatura e Polegar) */
+            .folha-titulo {
+              display: grid;
+              grid-template-columns: 1.15fr 1fr;
+              border: 3px solid #000;
+              background: #84cc16; /* Verde Oficial das Atividades Eleitorais */
+              page-break-inside: avoid;
+              height: 255px;
+              position: relative;
+            }
+            .lado-frente {
+              background: #84cc16;
+              padding: 10px 14px;
+              border-right: 2px dashed #000;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+            }
+            .lado-verso {
+              background: #84cc16;
+              padding: 10px 14px;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+            }
+            .tarja-verde {
+              background: #15803d;
+              color: white;
+              text-align: center;
+              font-weight: 900;
+              font-size: 11px;
+              padding: 4px;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              border: 1px solid #000;
+            }
+            .titulo-destaque {
+              text-align: center;
+              font-size: 14px;
+              font-weight: 900;
+              margin: 4px 0;
+              color: #000;
+              letter-spacing: 0.5px;
+            }
+            .caixa-campo {
+              background: white;
+              border: 1.5px solid #000;
+              padding: 3px 6px;
+              margin-bottom: 5px;
+            }
+            .label-campo {
+              font-size: 8px;
+              font-weight: 900;
+              color: #333;
+              text-transform: uppercase;
+              display: block;
+            }
+            .valor-campo {
+              font-size: 13px;
+              font-weight: 900;
+              color: #000;
+              min-height: 16px;
+            }
+            .grid-triplo {
+              display: grid;
+              grid-template-columns: 1fr 1fr 1fr;
+              gap: 4px;
+            }
+            .grid-duplo {
+              display: grid;
+              grid-template-columns: 1.3fr 1fr;
+              gap: 4px;
+            }
+            /* Lado Verso: Polegar Direito e Assinatura */
+            .box-assinatura {
+              background: white;
+              border: 1.5px solid #000;
+              height: 52px;
+              padding: 4px;
+              position: relative;
+            }
+            .box-polegar {
+              background: white;
+              border: 1.5px solid #000;
+              flex: 1;
+              margin-top: 6px;
+              margin-bottom: 6px;
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-end;
+              align-items: center;
+              padding-bottom: 4px;
+              background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+              background-size: 8px 8px;
+            }
+            .corte-linha {
+              position: absolute;
+              right: -12px;
+              top: 50%;
+              font-size: 9px;
+            }
+          </style>
+        </head>
+        <body>
+          <div style="text-align:center; margin-bottom:10px;">
+            <strong style="font-size:14px; text-transform:uppercase;">JUSTIÇA ELEITORAL ESCOLAR - TÍTULOS ELEITORAIS</strong><br>
+            <small style="color:#555;">Dobre no meio ou recorte para entregar a cada criança</small>
+          </div>
+          <div class="grid-a4">
+      `);
+
+      eleitores.forEach(aluno => {
+        janela.document.write(`
+          <div class="folha-titulo">
+            <!-- LADO ESQUERDO: DADOS DO ELEITOR -->
+            <div class="lado-frente">
+              <div>
+                <div class="tarja-verde">REPÚBLICA FEDERATIVA DO BRASIL</div>
+                <div class="titulo-destaque">MEU TÍTULO ELEITORAL</div>
+                
+                <div class="caixa-campo">
+                  <span class="label-campo">NOME DO ELEITOR</span>
+                  <div class="valor-campo" style="font-size:14px;">${aluno.nome.toUpperCase()}</div>
+                </div>
+
+                <div class="grid-duplo">
+                  <div class="caixa-campo">
+                    <span class="label-campo">DATA DE NASCIMENTO</span>
+                    <div class="valor-campo">___/___/______</div>
+                  </div>
+                  <div class="caixa-campo">
+                    <span class="label-campo">Nº DE INSCRIÇÃO / CHAMADA</span>
+                    <div class="valor-campo" style="color:#15803d; font-size:14px;">#${aluno.chamada} (${aluno.token})</div>
+                  </div>
+                </div>
+
+                <div class="grid-triplo">
+                  <div class="caixa-campo">
+                    <span class="label-campo">ZONA</span>
+                    <div class="valor-campo">${zona}</div>
+                  </div>
+                  <div class="caixa-campo">
+                    <span class="label-campo">SEÇÃO</span>
+                    <div class="valor-campo">${secao}</div>
+                  </div>
+                  <div class="caixa-campo">
+                    <span class="label-campo">EMISSÃO</span>
+                    <div class="valor-campo">${hoje}</div>
+                  </div>
+                </div>
+
+                <div class="caixa-campo" style="margin-bottom:0;">
+                  <span class="label-campo">MUNICÍPIO</span>
+                  <div class="valor-campo">${municipio.toUpperCase()}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- LADO DIREITO: ASSINATURA E POLEGAR DIREITO -->
+            <div class="lado-verso">
+              <div class="tarja-verde">REPÚBLICA FEDERATIVA DO BRASIL</div>
+
+              <div class="box-assinatura">
+                <span class="label-campo" style="text-align:center;">ASSINATURA DO ELEITOR</span>
+                <div style="border-bottom: 1px dashed #777; margin-top: 24px;"></div>
+              </div>
+
+              <div class="box-polegar">
+                <span class="label-campo" style="background:rgba(255,255,255,0.9); padding:2px 6px; border:1px solid #999; border-radius:3px;">POLEGAR DIREITO</span>
+              </div>
+
+              <div style="text-align:center; font-size:9px; font-weight:bold; color:#000;">
+                CÓDIGO DE ACESSO À URNA: <span style="font-family:monospace; font-size:11px; background:#fff; padding:1px 4px; border:1px solid #000;">${aluno.chamada}</span>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+
+      janela.document.write(`
+          </div>
+        </body>
+        </html>
+      `);
+      janela.document.close();
+      janela.print();
     }
 
     function cadastrarChapa() {
@@ -687,94 +1135,7 @@
       }
     }
 
-    /* --- GESTÃO, IMPORTAÇÃO E EXPORTAÇÃO DE ELEITORES --- */
-    function gerarTokens() {
-      const qtd = parseInt(document.getElementById('qtd-tokens').value) || 10;
-      const novos = [];
-      for (let i = 0; i < qtd; i++) {
-        novos.push('ELEITOR-' + Math.random().toString(36).substring(2, 7).toUpperCase());
-      }
-      tokens = [...tokens, ...novos];
-      salvar();
-      alert(`${qtd} novos códigos foram adicionados!`);
-    }
-
-    function exportarTokens() {
-      if (tokens.length === 0) {
-        alert('Não há códigos ativos para exportar.');
-        return;
-      }
-      const conteudo = tokens.join('\r\n');
-      const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `codigos_eleitores_gremio_${new Date().toISOString().slice(0,10)}.txt`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function importarTokensArquivo(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const texto = e.target.result;
-        // Divide por quebra de linha, vírgula ou ponto e vírgula
-        const codigosImportados = texto
-          .split(/[\r\n,;]+/)
-          .map(t => t.trim().toUpperCase())
-          .filter(t => t.length > 0);
-
-        if (codigosImportados.length === 0) {
-          alert('Nenhum código válido encontrado no arquivo.');
-          return;
-        }
-
-        // Remove duplicados e une aos existentes
-        const uniao = Array.from(new Set([...tokens, ...codigosImportados]));
-        const novosInseridos = uniao.length - tokens.length;
-        tokens = uniao;
-        salvar();
-        alert(`${novosInseridos} novos códigos foram importados com sucesso! (Total ativo: ${tokens.length})`);
-        event.target.value = ''; // Limpa o input file
-      };
-      reader.readAsText(file);
-    }
-
-    function atualizarTokensPeloTextarea() {
-      const texto = document.getElementById('lista-tokens').value;
-      const parsed = texto
-        .split(/[\r\n,;]+/)
-        .map(t => t.trim().toUpperCase())
-        .filter(t => t.length > 0);
-
-      tokens = Array.from(new Set(parsed));
-      salvar();
-      alert(`Lista de códigos atualizada com sucesso! Total: ${tokens.length}`);
-    }
-
-    function copiarTokens() {
-      const lista = document.getElementById('lista-tokens');
-      lista.select();
-      document.execCommand('copy');
-      alert('Códigos copiados para a área de transferência!');
-    }
-
-    function limparTokens() {
-      if (confirm('Tem certeza que deseja apagar todos os códigos de eleitores pendentes?')) {
-        tokens = [];
-        salvar();
-      }
-    }
-
-    function atualizarAdmin() {
-      // Lista de tokens
-      document.getElementById('lista-tokens').value = tokens.join('\n');
-      document.getElementById('token-status').innerText = `${tokens.length} códigos ativos disponíveis.`;
-
-      // Lista visual de chapas
+    function renderizarAdmin() {
       const containerChapas = document.getElementById('lista-chapas-admin');
       containerChapas.innerHTML = '';
       chapas.forEach(c => {
@@ -794,7 +1155,6 @@
         containerChapas.appendChild(item);
       });
 
-      // Boletim de Urna
       const total = votos.length;
       let html = `<div style="font-size:16px; margin-bottom:12px;"><strong>Total de Votos Apurados:</strong> ${total}</div>`;
       html += `<table style="width:100%; border-collapse: collapse; font-size: 14px;">`;
@@ -836,8 +1196,12 @@
       }
     }
 
-    // Inicialização ao carregar
-    atualizarAdmin();
+    function renderizarTudo() {
+      renderizarEleitores();
+      renderizarAdmin();
+    }
+
+    renderizarTudo();
   </script>
 
   <script>
