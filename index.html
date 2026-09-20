@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urna Eletrônica - Eleição dos Bichos</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Eleição dos Bichos">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <style>
+    :root {
+      --bg: #1e293b;
+      --urna-body: #d3d5db;
+      --urna-dark: #222222;
+      --screen-bg: #f4f8fb;
+      --btn-branco: #ffffff;
+      --btn-corrige: #e65100;
+      --btn-confirma: #2e7d32;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: #1e293b;
+    }
+    .header-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 940px;
+      justify-content: center;
+    }
+    .tab-btn {
+      padding: 12px 24px;
+      border: none;
+      background: #334155;
+      color: #f8fafc;
+      font-weight: bold;
+      font-size: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .tab-btn:hover {
+      background: #475569;
+    }
+    .tab-btn.active {
+      background: #2563eb;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    }
+    .panel {
+      display: none;
+      background: white;
+      padding: 28px;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      max-width: 940px;
+      width: 100%;
+    }
+    .panel.active { display: block; }
+
+    /* Layout Autenticação */
+    .auth-card {
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .auth-card h2 {
+      margin-bottom: 10px;
+      color: #0f172a;
+    }
+    .auth-card p {
+      color: #64748b;
+      margin-bottom: 24px;
+      font-size: 15px;
+    }
+    .token-input {
+      font-size: 24px;
+      padding: 12px 18px;
+      text-transform: uppercase;
+      text-align: center;
+      width: 100%;
+      max-width: 320px;
+      letter-spacing: 2px;
+      font-weight: bold;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 15px;
+    }
+    .token-input:focus {
+      border-color: #2563eb;
+    }
+    .btn-liberar {
+      padding: 14px 28px;
+      font-size: 16px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      max-width: 320px;
+      transition: 0.2s;
+    }
+    .btn-liberar:hover {
+      background: #1d4ed8;
+    }
+    .nome-confirmacao {
+      margin-top: 20px;
+      padding: 14px;
+      background: #dcfce7;
+      border: 1px solid #86efac;
+      border-radius: 8px;
+      color: #166534;
+      font-size: 18px;
+      font-weight: bold;
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Layout da Urna */
+    .urna-container {
+      background: var(--urna-body);
+      padding: 24px;
+      border-radius: 16px;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 24px;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 10px 25px rgba(0,0,0,0.3);
+      border: 2px solid #b8bac2;
+    }
+    .tela {
+      background: var(--screen-bg);
+      border: 3px solid #64748b;
+      border-radius: 8px;
+      padding: 18px;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .identificacao-eleitor-topo {
+      background: #e2e8f0;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #334155;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .digitos {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    .digito-box {
+      width: 48px;
+      height: 58px;
+      border: 2px solid #334155;
+      font-size: 34px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .foto-box {
+      width: 110px;
+      height: 135px;
+      border: 2px solid #64748b;
+      background: #e2e8f0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .foto-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Teclado da Urna */
+    .teclado {
+      background: var(--urna-dark);
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    }
+    .justica-header {
+      color: #94a3b8;
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #333;
+      text-transform: uppercase;
+    }
+    .grid-numerico {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .btn-num {
+      background: #181818;
+      color: #f1f5f9;
+      border: 1px solid #383838;
+      font-size: 24px;
+      font-weight: bold;
+      padding: 12px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px #000;
+      transition: all 0.1s;
+    }
+    .btn-num:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px #000;
+    }
+    .acoes-urna {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .btn-acao {
+      border: none;
+      padding: 12px 4px;
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 6px;
+      box-shadow: 0 4px rgba(0,0,0,0.4);
+      transition: 0.1s;
+    }
+    .btn-acao:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px rgba(0,0,0,0.4);
+    }
+    .btn-branco { background: var(--btn-branco); color: #1e293b; }
+    .btn-corrige { background: var(--btn-corrige); color: white; }
+    .btn-confirma { background: var(--btn-confirma); color: white; height: 52px; font-size: 13px; }
+
+    /* Admin Styles */
+    .admin-sec {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .admin-sec h3 {
+      margin-bottom: 14px;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 100px 1.2fr 1.2fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .input-padrao {
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+    .input-padrao:focus {
+      border-color: #2563eb;
+    }
+    .btn-action {
+      padding: 9px 16px;
+      border-radius: 6px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      transition: 0.15s;
+    }
+    .btn-action:hover { opacity: 0.9; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-secondary { background: #475569; color: white; }
+    .btn-success { background: #16a34a; color: white; }
+    .btn-outline { background: white; border: 1px solid #cbd5e1; color: #1e293b; }
+    .btn-danger { background: #dc2626; color: white; }
+
+    /* Tabela de Eleitores */
+    .table-container {
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      margin-top: 14px;
+      background: white;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    table.data-table th, table.data-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    table.data-table th {
+      background: #f1f5f9;
+      position: sticky;
+      top: 0;
+      font-weight: bold;
+      color: #334155;
+    }
+
+    .chapas-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .chapa-item {
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chapa-thumb {
+      width: 45px;
+      height: 55px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+      .urna-container {
+        grid-template-columns: 1fr;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-nav">
+    <button class="tab-btn active" id="btn-tab-urna" onclick="trocarAba('urna')">🗳️ Votação / Urna</button>
+    <button class="tab-btn" id="btn-tab-admin" onclick="trocarAba('admin')">⚙️ Gestão de Eleitores, Candidatos & Apuração</button>
+  </div>
+
+  <!-- 1. ABA DA URNA -->
+  <div id="tab-urna" class="panel active">
+    <!-- Tela de Autenticação por Código -->
+    <div id="auth-area" class="auth-card">
+      <h2>ELEIÇÃO DOS BICHOS</h2>
+      <p>Digite o seu <strong>código</strong> para liberar a urna:</p>
+      <input type="text" id="token-input" class="token-input" placeholder="EX: 1 OU 101" autocomplete="off">
+      <br>
+      <button class="btn-liberar" onclick="validarToken()">Liberar Voto</button>
+      <div id="eleitor-saudacao" class="nome-confirmacao"></div>
+    </div>
+
+    <!-- Tela da Urna Eletrônica -->
+    <div id="urna-area" style="display: none;">
+      <div class="urna-container">
+        <!-- Tela -->
+        <div class="tela" id="tela-urna">
+          <div>
+            <div class="identificacao-eleitor-topo">
+              <span>ELEITOR(A): <span id="label-nome-eleitor">---</span></span>
+              <span>CÓD: <span id="label-codigo-eleitor">---</span></span>
+            </div>
+            <div style="font-size: 13px; text-transform: uppercase; color: #64748b; font-weight: 600;">SEU VOTO PARA</div>
+            <h2 style="margin: 4px 0 10px 0; color: #0f172a; font-size: 20px;">ELEIÇÃO DOS BICHOS</h2>
+            
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+              <div>
+                <div class="digitos">
+                  <div class="digito-box" id="d1"></div>
+                  <div class="digito-box" id="d2"></div>
+                </div>
+                <div id="candidato-info" style="margin-top: 12px; font-size: 15px; line-height: 1.5;"></div>
+              </div>
+              
+              <!-- Foto do Candidato / Bicho -->
+              <div id="quadro-foto" class="foto-box">
+                <img id="foto-candidato" src="" alt="Foto Candidato">
+              </div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid #cbd5e1; padding-top: 8px; font-size: 11px; color: #475569; line-height: 1.4;">
+            Aperte <strong>CONFIRMA</strong> para registrar seu voto.<br>
+            Aperte <strong>CORRIGE</strong> para reiniciar o voto.
+          </div>
+        </div>
+
+        <!-- Teclado -->
+        <div class="teclado">
+          <div class="justica-header">ELEIÇÃO DOS BICHOS - JUSTIÇA ESCOLAR</div>
+          <div class="grid-numerico">
+            <button class="btn-num" onclick="digito('1')">1</button>
+            <button class="btn-num" onclick="digito('2')">2</button>
+            <button class="btn-num" onclick="digito('3')">3</button>
+            <button class="btn-num" onclick="digito('4')">4</button>
+            <button class="btn-num" onclick="digito('5')">5</button>
+            <button class="btn-num" onclick="digito('6')">6</button>
+            <button class="btn-num" onclick="digito('7')">7</button>
+            <button class="btn-num" onclick="digito('8')">8</button>
+            <button class="btn-num" onclick="digito('9')">9</button>
+            <div></div>
+            <button class="btn-num" onclick="digito('0')">0</button>
+            <div></div>
+          </div>
+          <div class="acoes-urna">
+            <button class="btn-acao btn-branco" onclick="votarBranco()">BRANCO</button>
+            <button class="btn-acao btn-corrige" onclick="corrige()">CORRIGE</button>
+            <button class="btn-acao btn-confirma" onclick="confirma()">CONFIRMA</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ABA ADMINISTRATIVA -->
+  <div id="tab-admin" class="panel">
+    <h2 style="margin-bottom: 20px; color: #0f172a;">Painel Administrativo - ELEIÇÃO DOS BICHOS</h2>
+
+    <!-- GESTÃO, CRIAÇÃO, EDIÇÃO, IMPORTAÇÃO E EXPORTAÇÃO DE ELEITORES -->
+    <div class="admin-sec">
+      <h3>🎟️ 1. Gestão de Eleitores (Criar, Editar, Importar e Exportar)</h3>
+      
+      <!-- Formulário Direto de Criar / Editar Eleitor Individual -->
+      <div style="background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+        <strong id="form-eleitor-titulo" style="display: block; margin-bottom: 10px; color: #2563eb;">➕ Cadastrar Novo Eleitor:</strong>
+        <input type="hidden" id="edit-original-codigo" value="">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+          <input type="text" id="form-eleitor-codigo" class="input-padrao" placeholder="Código (ex: 1, 101)" style="width: 140px;">
+          <input type="text" id="form-eleitor-nome" class="input-padrao" placeholder="Nome da Criança" style="flex: 1; min-width: 200px;">
+          <button id="btn-salvar-eleitor" onclick="salvarEleitorForm()" class="btn-action btn-primary">Salvar Eleitor</button>
+          <button id="btn-cancelar-edicao" onclick="cancelarEdicaoEleitor()" class="btn-action btn-outline" style="display: none;">Cancelar</button>
+        </div>
+      </div>
+
+      <!-- Barra de Ações Rápidas (Importar/Exportar) -->
+      <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+        <label class="btn-action btn-outline" style="cursor: pointer;">
+          📤 Importar Lista (.txt / .csv)
+          <input type="file" id="import-eleitores-file" accept=".txt,.csv" style="display: none;" onchange="importarArquivoEleitores(event)">
+        </label>
+        <button onclick="exportarEleitoresTxt()" class="btn-action btn-success">📥 Exportar Lista (.txt)</button>
+        <button onclick="carregarExemplo()" class="btn-action btn-outline">💡 Preencher Exemplo</button>
+        <button onclick="limparEleitores()" class="btn-action btn-outline" style="color: #dc2626; border-color: #fca5a5;">🗑️ Limpar Todos</button>
+        <span id="eleitores-count-badge" style="font-size: 14px; color: #0284c7; font-weight: bold; margin-left: 5px;"></span>
+      </div>
+
+      <!-- Campo para Colar em Lote -->
+      <details style="margin-bottom: 12px; background: #f1f5f9; padding: 10px; border-radius: 6px;">
+        <summary style="font-size: 13px; font-weight: bold; cursor: pointer; color: #334155;">📥 Colar lista em lote (vários alunos de uma vez)</summary>
+        <textarea id="texto-eleitores" class="input-padrao" style="width: 100%; height: 90px; font-family: monospace; font-size: 13px; margin-top: 8px;" placeholder="Digite ou cole aqui no formato:&#10;1, Ana Clara&#10;2, Bernardo Ferreira&#10;3, Clara Beatriz"></textarea>
+        <div style="text-align: right; margin-top: 6px;">
+          <button onclick="salvarListaEleitoresManual()" class="btn-action btn-primary">Processar Lote</button>
+        </div>
+      </details>
+
+      <!-- Tabela de Conferência com Botão de Edição -->
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 120px;">Código</th>
+              <th>Nome da Criança</th>
+              <th style="width: 120px;">Status</th>
+              <th style="width: 130px; text-align: center;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-eleitores-corpo"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CADASTRO DE CANDIDATOS (BICHOS) -->
+    <div class="admin-sec">
+      <h3>🦁 2. Cadastro de Candidatos (Bichos)</h3>
+      <div class="form-grid">
+        <input type="number" id="cad-num" class="input-padrao" placeholder="Nº (2 dígitos)" min="10" max="99">
+        <input type="text" id="cad-nome" class="input-padrao" placeholder="Nome do Candidato / Bicho">
+        <input type="text" id="cad-rep" class="input-padrao" placeholder="Vice ou Descrição">
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <label style="font-size: 14px; font-weight: 600;">Foto do Candidato (Opcional):</label>
+        <input type="file" id="cad-foto" accept="image/*" class="input-padrao" style="flex: 1; min-width: 200px;">
+        <button onclick="cadastrarChapa()" class="btn-action btn-success">Cadastrar Candidato</button>
+      </div>
+
+      <div class="chapas-list" id="lista-chapas-admin"></div>
+    </div>
+
+    <!-- BOLETIM DE URNA / APURAÇÃO -->
+    <div class="admin-sec">
+      <h3>📊 3. Boletim de Urna / Apuração em Tempo Real</h3>
+      <div id="relatorio-apuracao" style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #cbd5e1; line-height: 1.8;"></div>
+      <br>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button onclick="imprimirBoletim()" class="btn-action" style="background: #0f172a; color: white;">🖨️ Imprimir / Salvar Boletim</button>
+        <button class="btn-action btn-danger" onclick="resetarTudo()">⚠️ Zerar Urna e Reiniciar Eleição</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Estrutura de Eleitores: { codigo: '1', nome: 'Alice Silva', votou: false }
+    let eleitores = JSON.parse(localStorage.getItem('bichos_eleitores')) || [
+      { codigo: '1', nome: 'Alice Silva Fernandes', votou: false },
+      { codigo: '2', nome: 'Bernardo Ferreira Lima', votou: false },
+      { codigo: '3', nome: 'Clara Beatriz Rocha', votou: false },
+      { codigo: '4', nome: 'Davi Lucas Monteiro', votou: false }
+    ];
+
+    // Candidatos iniciais temáticos da Eleição dos Bichos
+    let chapas = JSON.parse(localStorage.getItem('bichos_chapas')) || [
+      { numero: '10', nome: 'Leão - Coragem e Força', rep: 'Vice: Macaco', foto: null },
+      { numero: '20', nome: 'Coruja - Sabedoria e União', rep: 'Vice: Raposa', foto: null },
+      { numero: '30', nome: 'Elefante - Memória e Respeito', rep: 'Vice: Girafa', foto: null }
+    ];
+
+    let votos = JSON.parse(localStorage.getItem('bichos_votos')) || [];
+    
+    let eleitorAtual = null;
+    let votoDigitado = '';
+    let isBranco = false;
+
+    // Sintetizador Web Audio API nativo
+    let audioCtx = null;
+    function obterAudioContext() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+    
+    function bip(freq = 440, dur = 0.08) {
+      try {
+        const ctx = obterAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+        osc.stop(ctx.currentTime + dur);
+      } catch (e) {}
+    }
+
+    function somFim() {
+      try {
+        const ctx = obterAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.value = 440;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+        osc.stop(ctx.currentTime + 1.2);
+      } catch (e) {}
+    }
+
+    function salvar() {
+      localStorage.setItem('bichos_chapas', JSON.stringify(chapas));
+      localStorage.setItem('bichos_eleitores', JSON.stringify(eleitores));
+      localStorage.setItem('bichos_votos', JSON.stringify(votos));
+      atualizarPainelAdmin();
+    }
+
+    function trocarAba(aba) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      
+      if (aba === 'urna') {
+        document.getElementById('tab-urna').classList.add('active');
+        document.getElementById('btn-tab-urna').classList.add('active');
+      } else {
+        document.getElementById('tab-admin').classList.add('active');
+        document.getElementById('btn-tab-admin').classList.add('active');
+        atualizarPainelAdmin();
+      }
+    }
+
+    /* --- AUTENTICAÇÃO: CRIANÇA DIGITA O CÓDIGO E O NOME APARECE --- */
+    function validarToken() {
+      const input = document.getElementById('token-input').value.trim().toUpperCase();
+      if (!input) {
+        alert('Por favor, digite o seu código para votar.');
+        return;
+      }
+
+      const aluno = eleitores.find(e => e.codigo.toUpperCase() === input);
+      
+      if (!aluno) {
+        alert('Código não cadastrado na Eleição dos Bichos!');
+        return;
+      }
+
+      if (aluno.votou) {
+        alert(`O eleitor ${aluno.nome} (Código: ${aluno.codigo}) já votou nesta eleição!`);
+        return;
+      }
+
+      eleitorAtual = aluno;
+
+      // Exibe saudação com o nome da criança
+      const saudacao = document.getElementById('eleitor-saudacao');
+      saudacao.innerHTML = `Olá, <strong>${aluno.nome}</strong>!<br><span style="font-size: 14px; font-weight: normal; color: #15803d;">Liberando a urna...</span>`;
+      saudacao.style.display = 'block';
+
+      // Configura os rótulos no topo da urna
+      document.getElementById('label-nome-eleitor').innerText = aluno.nome;
+      document.getElementById('label-codigo-eleitor').innerText = aluno.codigo;
+
+      setTimeout(() => {
+        document.getElementById('auth-area').style.display = 'none';
+        document.getElementById('urna-area').style.display = 'block';
+        corrige();
+      }, 1200);
+    }
+
+    function digito(n) {
+      if (isBranco || votoDigitado.length >= 2) return;
+      bip(1000, 0.08);
+      votoDigitado += n;
+      atualizarDisplay();
+    }
+
+    function votarBranco() {
+      bip(1000, 0.08);
+      isBranco = true;
+      votoDigitado = '';
+      document.getElementById('d1').innerText = '';
+      document.getElementById('d2').innerText = '';
+      document.getElementById('quadro-foto').style.display = 'none';
+      document.getElementById('candidato-info').innerHTML = '<h3 style="color:#64748b; margin-top:5px;">VOTO EM BRANCO</h3>';
+    }
+
+    function corrige() {
+      bip(600, 0.1);
+      votoDigitado = '';
+      isBranco = false;
+      document.getElementById('d1').innerText = '';
+      document.getElementById('d2').innerText = '';
+      document.getElementById('candidato-info').innerHTML = '';
+      document.getElementById('quadro-foto').style.display = 'none';
+      document.getElementById('foto-candidato').src = '';
+    }
+
+    function atualizarDisplay() {
+      document.getElementById('d1').innerText = votoDigitado[0] || '';
+      document.getElementById('d2').innerText = votoDigitado[1] || '';
+
+      const quadroFoto = document.getElementById('quadro-foto');
+      const imgFoto = document.getElementById('foto-candidato');
+
+      if (votoDigitado.length === 2) {
+        const c = chapas.find(x => x.numero === votoDigitado);
+        if (c) {
+          document.getElementById('candidato-info').innerHTML = `
+            <strong>Candidato:</strong> ${c.nome}<br>
+            <strong>Vice:</strong> ${c.rep}
+          `;
+          if (c.foto) {
+            imgFoto.src = c.foto;
+            quadroFoto.style.display = 'flex';
+          } else {
+            quadroFoto.style.display = 'none';
+          }
+        } else {
+          document.getElementById('candidato-info').innerHTML = '<h3 style="color:#ef4444; margin-top:5px;">VOTO NULO</h3><small style="color:#64748b;">Candidato inexistente</small>';
+          quadroFoto.style.display = 'none';
+        }
+      } else {
+        quadroFoto.style.display = 'none';
+      }
+    }
+
+    function confirma() {
+      if (!isBranco && votoDigitado.length < 2) return;
+      
+      let tipoVoto = 'NULO';
+      if (isBranco) {
+        tipoVoto = 'BRANCO';
+      } else {
+        const c = chapas.find(x => x.numero === votoDigitado);
+        tipoVoto = c ? c.numero : 'NULO';
+      }
+
+      // Gravação anônima do voto
+      votos.push(tipoVoto);
+
+      // Marca o eleitor como já votado
+      if (eleitorAtual) {
+        eleitorAtual.votou = true;
+      }
+
+      salvar();
+      somFim();
+
+      document.getElementById('tela-urna').innerHTML = `
+        <div style="margin: auto; text-align: center; padding: 40px 0;">
+          <h1 style="font-size: 48px; color: #0f172a; margin-bottom: 8px;">FIM</h1>
+          <p style="font-size: 16px; color: #16a34a; font-weight: bold;">VOTO GRAVADO COM SUCESSO</p>
+        </div>
+      `;
+      
+      setTimeout(() => {
+        location.reload();
+      }, 2200);
+    }
+
+    /* --- CRIAR E EDITAR ELEITOR INDIVIDUAL --- */
+    function salvarEleitorForm() {
+      const codigo = document.getElementById('form-eleitor-codigo').value.trim();
+      const nome = document.getElementById('form-eleitor-nome').value.trim();
+      const originalCodigo = document.getElementById('edit-original-codigo').value;
+
+      if (!codigo || !nome) {
+        alert('Por favor, preencha o código e o nome da criança.');
+        return;
+      }
+
+      // Se for uma edição
+      if (originalCodigo) {
+        const index = eleitores.findIndex(e => e.codigo === originalCodigo);
+        if (index !== -1) {
+          // Verifica se o novo código já existe em outro eleitor
+          if (codigo !== originalCodigo && eleitores.some(e => e.codigo.toUpperCase() === codigo.toUpperCase())) {
+            alert('Já existe outro eleitor cadastrado com este código!');
+            return;
+          }
+          eleitores[index].codigo = codigo;
+          eleitores[index].nome = nome;
+          alert('Eleitor atualizado com sucesso!');
+        }
+      } else {
+        // Novo cadastro
+        if (eleitores.some(e => e.codigo.toUpperCase() === codigo.toUpperCase())) {
+          alert('Já existe um eleitor com este código! Escolha outro ou edite o existente.');
+          return;
+        }
+        eleitores.push({ codigo, nome, votou: false });
+        alert('Eleitor cadastrado com sucesso!');
+      }
+
+      cancelarEdicaoEleitor();
+      salvar();
+    }
+
+    function iniciarEdicaoEleitor(codigo) {
+      const eleitor = eleitores.find(e => e.codigo === codigo);
+      if (!eleitor) return;
+
+      document.getElementById('form-eleitor-titulo').innerText = `✏️ Editando Eleitor: ${eleitor.nome}`;
+      document.getElementById('form-eleitor-codigo').value = eleitor.codigo;
+      document.getElementById('form-eleitor-nome').value = eleitor.nome;
+      document.getElementById('edit-original-codigo').value = eleitor.codigo;
+      
+      document.getElementById('btn-salvar-eleitor').innerText = 'Atualizar Eleitor';
+      document.getElementById('btn-cancelar-edicao').style.display = 'inline-flex';
+      
+      // Foca no campo de nome
+      document.getElementById('form-eleitor-nome').focus();
+    }
+
+    function cancelarEdicaoEleitor() {
+      document.getElementById('form-eleitor-titulo').innerText = '➕ Cadastrar Novo Eleitor:';
+      document.getElementById('form-eleitor-codigo').value = '';
+      document.getElementById('form-eleitor-nome').value = '';
+      document.getElementById('edit-original-codigo').value = '';
+      
+      document.getElementById('btn-salvar-eleitor').innerText = 'Salvar Eleitor';
+      document.getElementById('btn-cancelar-edicao').style.display = 'none';
+    }
+
+    /* --- IMPORTAÇÃO E EXPORTAÇÃO DE ELEITORES --- */
+    function processarTextoEleitores(texto) {
+      if (!texto || !texto.trim()) return 0;
+      const linhas = texto.trim().split('\n');
+      let adicionados = 0;
+
+      linhas.forEach(linha => {
+        linha = linha.trim();
+        if (!linha) return;
+
+        let partes = linha.split(/[,;\-\t]/);
+        if (partes.length >= 2) {
+          const cod = partes[0].trim();
+          const nome = partes.slice(1).join(' ').trim();
+
+          if (cod && nome) {
+            const existente = eleitores.find(e => e.codigo.toUpperCase() === cod.toUpperCase());
+            if (existente) {
+              existente.nome = nome;
+            } else {
+              eleitores.push({ codigo: cod, nome: nome, votou: false });
+              adicionados++;
+            }
+          }
+        }
+      });
+
+      salvar();
+      return adicionados;
+    }
+
+    function salvarListaEleitoresManual() {
+      const texto = document.getElementById('texto-eleitores').value;
+      const qtd = processarTextoEleitores(texto);
+      document.getElementById('texto-eleitores').value = '';
+      alert(`${qtd} eleitores processados da lista!`);
+    }
+
+    function importarArquivoEleitores(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const qtd = processarTextoEleitores(e.target.result);
+        alert(`${qtd} eleitores importados do arquivo com sucesso!`);
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    function exportarEleitoresTxt() {
+      if (eleitores.length === 0) {
+        alert('Não há eleitores cadastrados para exportar.');
+        return;
+      }
+      let conteudo = "";
+      eleitores.forEach(e => {
+        conteudo += `${e.codigo}, ${e.nome}\r\n`;
+      });
+
+      const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `eleitores_eleicao_dos_bichos_${new Date().toISOString().slice(0,10)}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function carregarExemplo() {
+      document.getElementById('texto-eleitores').value = 
+`1, Alice Silva Fernandes
+2, Bernardo Ferreira Lima
+3, Clara Beatriz Rocha
+4, Davi Lucas Monteiro
+5, Enzo Gabriel Pires
+6, Gabriela Souza Moreira`;
+    }
+
+    function removerEleitor(codigo) {
+      if (confirm(`Remover eleitor com código ${codigo}?`)) {
+        eleitores = eleitores.filter(e => e.codigo !== codigo);
+        salvar();
+      }
+    }
+
+    function limparEleitores() {
+      if (confirm('Tem certeza que deseja apagar todos os eleitores cadastrados?')) {
+        eleitores = [];
+        salvar();
+      }
+    }
+
+    /* --- CADASTRO DE CANDIDATOS (BICHOS) & APURAÇÃO --- */
+    function cadastrarChapa() {
+      const num = document.getElementById('cad-num').value.trim();
+      const nome = document.getElementById('cad-nome').value.trim();
+      const rep = document.getElementById('cad-rep').value.trim();
+      const fileInput = document.getElementById('cad-foto');
+
+      if (num.length !== 2 || !nome) {
+        alert('O número do candidato deve ter exatamente 2 dígitos e o nome é obrigatório.');
+        return;
+      }
+
+      if (chapas.some(c => c.numero === num)) {
+        alert('Já existe um candidato cadastrado com este número!');
+        return;
+      }
+
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          salvarCandidatoComFoto(num, nome, rep, e.target.result);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        salvarCandidatoComFoto(num, nome, rep, null);
+      }
+    }
+
+    function salvarCandidatoComFoto(numero, nome, rep, foto) {
+      chapas.push({ numero, nome, rep: rep || 'Não informado', foto });
+      salvar();
+      document.getElementById('cad-num').value = '';
+      document.getElementById('cad-nome').value = '';
+      document.getElementById('cad-rep').value = '';
+      document.getElementById('cad-foto').value = '';
+      alert('Candidato cadastrado com sucesso!');
+    }
+
+    function excluirChapa(numero) {
+      if (confirm(`Remover candidato ${numero}?`)) {
+        chapas = chapas.filter(c => c.numero !== numero);
+        salvar();
+      }
+    }
+
+    function atualizarPainelAdmin() {
+      // 1. Tabela de Eleitores com Botões de Editar e Excluir
+      document.getElementById('eleitores-count-badge').innerText = `${eleitores.length} eleitores cadastrados.`;
+      const tbody = document.getElementById('tabela-eleitores-corpo');
+      tbody.innerHTML = '';
+
+      if (eleitores.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#64748b;padding:16px;">Nenhum eleitor cadastrado ainda.</td></tr>';
+      } else {
+        eleitores.forEach(e => {
+          const tr = document.createElement('tr');
+          const status = e.votou 
+            ? '<span style="color:#16a34a; font-weight:bold;">✔ Votou</span>' 
+            : '<span style="color:#eab308; font-weight:bold;">⏳ Pendente</span>';
+          tr.innerHTML = `
+            <td><code style="background:#f1f5f9;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:14px;">${e.codigo}</code></td>
+            <td><strong>${e.nome}</strong></td>
+            <td>${status}</td>
+            <td style="text-align: center; white-space: nowrap;">
+              <button onclick="iniciarEdicaoEleitor('${e.codigo}')" style="background:#e0f2fe; border:1px solid #7dd3fc; color:#0284c7; padding:4px 8px; border-radius:4px; font-weight:bold; cursor:pointer; margin-right:4px;">✏️ Editar</button>
+              <button onclick="removerEleitor('${e.codigo}')" style="background:#fee2e2; border:1px solid #fca5a5; color:#dc2626; padding:4px 8px; border-radius:4px; font-weight:bold; cursor:pointer;">✕</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // 2. Lista de Candidatos
+      const containerChapas = document.getElementById('lista-chapas-admin');
+      containerChapas.innerHTML = '';
+      chapas.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'chapa-item';
+        const imgTag = c.foto 
+          ? `<img src="${c.foto}" class="chapa-thumb">` 
+          : `<div class="chapa-thumb" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:#64748b;">S/ Foto</div>`;
+        item.innerHTML = `
+          ${imgTag}
+          <div style="flex:1;">
+            <strong>${c.numero} - ${c.nome}</strong><br>
+            <small style="color:#64748b;">Vice: ${c.rep}</small>
+          </div>
+          <button onclick="excluirChapa('${c.numero}')" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px;">✕</button>
+        `;
+        containerChapas.appendChild(item);
+      });
+
+      // 3. Boletim de Urna
+      const total = votos.length;
+      let html = `<div style="font-size:16px; margin-bottom:12px;"><strong>Total de Votos Apurados:</strong> ${total}</div>`;
+      html += `<table style="width:100%; border-collapse: collapse; font-size: 14px;">`;
+      html += `<tr style="border-bottom: 2px solid #cbd5e1; text-align: left;"><th style="padding: 6px;">Candidato / Opção</th><th>Votos</th><th>%</th></tr>`;
+      
+      chapas.forEach(c => {
+        const count = votos.filter(v => v === c.numero).length;
+        const pct = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
+        html += `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 6px;"><strong>${c.numero} - ${c.nome}</strong></td><td>${count}</td><td>${pct}%</td></tr>`;
+      });
+
+      const brancos = votos.filter(v => v === 'BRANCO').length;
+      const nulos = votos.filter(v => v === 'NULO').length;
+      html += `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 6px;">Votos em Branco</td><td>${brancos}</td><td>${total > 0 ? ((brancos/total)*100).toFixed(1) : 0}%</td></tr>`;
+      html += `<tr><td style="padding: 6px;">Votos Nulos</td><td>${nulos}</td><td>${total > 0 ? ((nulos/total)*100).toFixed(1) : 0}%</td></tr>`;
+      html += `</table>`;
+      
+      document.getElementById('relatorio-apuracao').innerHTML = html;
+    }
+
+    function imprimirBoletim() {
+      const conteudo = document.getElementById('relatorio-apuracao').innerHTML;
+      const janela = window.open('', '', 'width=600,height=600');
+      janela.document.write('<!DOCTYPE html><html><head><title>Boletim de Urna - Eleição dos Bichos</title>');
+      janela.document.write('<style>body{font-family:sans-serif;padding:20px;line-height:1.6;} table{width:100%;border-collapse:collapse;} th,td{border:1px solid #ccc;padding:8px;}</style>');
+      janela.document.write('</head><body>');
+      janela.document.write('<h2>BOLETIM DE URNA - ELEIÇÃO DOS BICHOS</h2><hr><br>');
+      janela.document.write(conteudo);
+      janela.document.write('<br><br><p>Data da Emissão: ' + new Date().toLocaleString('pt-BR') + '</p>');
+      janela.document.write('</body></html>');
+      janela.document.close();
+      janela.print();
+    }
+
+    function resetarTudo() {
+      if (confirm('ATENÇÃO: Deseja realmente zerar todos os votos e redefinir a urna para o estado inicial?')) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+
+    // Inicialização ao carregar
+    atualizarPainelAdmin();
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker registrado:', reg.scope))
+          .catch(err => console.log('Falha ao registrar Service Worker:', err));
+      });
+    }
+  </script>
+</body>
+</html>
